@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cart — Star King Power Tools</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <a href="index.html" class="nav-logo">
+      <img src="../images/starkinglogo2.png" alt="Star King" class="logo-img" />
+      <span>STAR <span>KING</span></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="products.html">Products</a></li>
+      <li><a href="about.html">About Us</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li>
+        <a href="cart.html" class="nav-cart active">
+          Cart
+          <span class="cart-badge">0</span>
+        </a>
+      </li>
+      <li class="nav-auth-zone"></li>
+    </ul>
+    <div class="hamburger"><span></span><span></span><span></span></div>
+  </nav>
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <h1>Your <em>Cart</em></h1>
+    <p>Review your tools before placing your order.</p>
+  </div>
+
+  <!-- CART SECTION -->
+  <section class="section">
+    <div class="cart-layout">
+      <!-- Cart Items -->
+      <div id="cartContainer">
+        <div class="loading"><div class="spinner"></div> Loading cart...</div>
+      </div>
+
+      <!-- Cart Summary -->
+      <div class="cart-summary" id="cartSummary" style="display:none">
+        <h3>Order Summary</h3>
+        <div class="summary-row">
+          <span>Subtotal</span>
+          <span id="subtotal">₹0.00</span>
+        </div>
+        <div class="summary-row">
+          <span>GST (18%)</span>
+          <span id="gst">₹0.00</span>
+        </div>
+        <div class="summary-row total">
+          <span>Total</span>
+          <span id="total">₹0.00</span>
+        </div>
+        <br>
+        <a href="checkout.html" class="btn-primary" style="width:100%;justify-content:center;display:block;text-align:center;padding:14px">Proceed to Checkout →</a>
+        <br><br>
+        <a href="products.html" class="btn-secondary" style="display:block;text-align:center">← Continue Shopping</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="nav-logo">
+          <img src="../images/starkinglogo2.png" alt="Star King" class="logo-img" />
+          <span>STAR <span>KING</span></span>
+        </div>
+        <p>Star King Power Tools & Spare Parts Pvt. Ltd.<br>Gill Chownk, Gill Road, Miller Ganj, Ludhiana, Punjab 141003</p>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <a href="index.html">Home</a>
+        <a href="products.html">Products</a>
+        <a href="about.html">About Us</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <div class="footer-col">
+        <h4>Categories</h4>
+        <a href="products.html">Drills</a>
+        <a href="products.html">Grinders</a>
+        <a href="products.html">Saws</a>
+        <a href="products.html">Hammers</a>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <a href="#">📍 Gill Chownk, Gill Road, Miller Ganj, Ludhiana</a>
+        <a href="tel:18001020375">📞 1800 102 0375</a>
+        <a href="mailto:customercare@starkingpowertools.com">✉️ customercare@starkingpowertools.com</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 Star King Power Tools. All rights reserved.</span>
+      <span>Made with ⚡ in Ludhiana, Punjab, India</span>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/cart.js"></script>
+
+  <!-- AI CHATBOT -->
+  <div class="chatbot-fab" id="chatFab" onclick="toggleChat()">
+    <span class="chatbot-icon">🤖</span>
+    <span class="chatbot-label">Ask AI</span>
+  </div>
+  <div class="chatbot-window" id="chatWindow">
+    <div class="chatbot-header">
+      <div class="chatbot-avatar">⚙️</div>
+      <div><strong>Star King Assistant</strong><div class="chatbot-status">● Online</div></div>
+      <button class="chatbot-close" onclick="toggleChat()">✕</button>
+    </div>
+    <div class="chatbot-messages" id="chatMessages">
+      <div class="chat-msg bot"><div class="chat-bubble">Hi! Need help choosing a tool or have questions? I am here! 🔧</div></div>
+      <div class="chat-quick-replies" id="quickReplies">
+        <button onclick="sendQuick('Show all products')">Products</button>
+        <button onclick="sendQuick('Warranty info')">Warranty</button>
+        <button onclick="sendQuick('Payment options')">Payment</button>
+      </div>
+    </div>
+    <div class="chatbot-input-row">
+      <input type="text" id="chatInput" placeholder="Ask anything..." onkeydown="if(event.key==='Enter') sendChat()" />
+      <button onclick="sendChat()">➤</button>
+    </div>
+  </div>
+  <script src="js/chatbot.js"></script>
+</body>
+</html>

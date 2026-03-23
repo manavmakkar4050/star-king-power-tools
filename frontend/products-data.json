@@ -1,0 +1,100 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "Impact Drill",
+      "category": "Drills",
+      "description": "Powerful impact drill for heavy-duty drilling and fastening",
+      "price": 4500,
+      "image_url": "images/impact_drill_1.png"
+    },
+    {
+      "id": 2,
+      "name": "Electric Screwdriver",
+      "category": "Drills",
+      "description": "Compact electric screwdriver for precision work",
+      "price": 1200,
+      "image_url": "images/electric_screwdriver_1.png"
+    },
+    {
+      "id": 3,
+      "name": "Angle Grinder",
+      "category": "Grinders",
+      "description": "Versatile angle grinder for cutting and grinding",
+      "price": 3200,
+      "image_url": "images/angle_grinder_1.png"
+    },
+    {
+      "id": 4,
+      "name": "Marble Cutter",
+      "category": "Grinders",
+      "description": "Precision marble and tile cutting machine",
+      "price": 8500,
+      "image_url": "images/marble_cutter_1.png"
+    },
+    {
+      "id": 5,
+      "name": "Circular Saw",
+      "category": "Saws",
+      "description": "High-speed circular saw for clean cuts",
+      "price": 3800,
+      "image_url": "images/circular_saw_1.png"
+    },
+    {
+      "id": 6,
+      "name": "Jig Saw",
+      "category": "Saws",
+      "description": "Precision jig saw for intricate cutting",
+      "price": 2800,
+      "image_url": "images/jig_saw_1.png"
+    },
+    {
+      "id": 7,
+      "name": "Cut Off Machine",
+      "category": "Saws",
+      "description": "Industrial cut-off machine for metal and masonry",
+      "price": 6200,
+      "image_url": "images/cut_off_machine_1.png"
+    },
+    {
+      "id": 8,
+      "name": "Demolition Hammer",
+      "category": "Hammers",
+      "description": "Heavy-duty demolition hammer for tough jobs",
+      "price": 7500,
+      "image_url": "images/demolition_hammer_1.png"
+    },
+    {
+      "id": 9,
+      "name": "Rotary Hammer",
+      "category": "Hammers",
+      "description": "Powerful rotary hammer for concrete and masonry",
+      "price": 6800,
+      "image_url": "images/rotary_hammer_1.png"
+    },
+    {
+      "id": 10,
+      "name": "Electric Mixer",
+      "category": "Drills",
+      "description": "Heavy-duty electric mixer for concrete and mortar",
+      "price": 5200,
+      "image_url": "images/electric_mixer_1.png"
+    },
+    {
+      "id": 11,
+      "name": "Electric Blower",
+      "category": "Drills",
+      "description": "Powerful electric blower for cleaning and air circulation",
+      "price": 2100,
+      "image_url": "images/electric_blower_1.png"
+    },
+    {
+      "id": 12,
+      "name": "Electric Planner",
+      "category": "Saws",
+      "description": "Precision electric planner for woodworking",
+      "price": 4200,
+      "image_url": "images/electric_planner_1.png"
+    }
+  ]
+}
