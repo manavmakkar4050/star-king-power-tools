@@ -19,6 +19,7 @@ app.use('/api/products', require('./routes/products'));
 app.use('/api/orders',   require('./routes/orders'));
 app.use('/api/contact',  require('./routes/contact'));
 app.use('/api/payment',  require('./routes/payment'));
+app.use('/api/admin',   require('./routes/admin'));
 
 // Fallback — serve frontend
 app.get('*', (req, res) => {
