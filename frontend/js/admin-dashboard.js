@@ -36,11 +36,6 @@ function handleLogin(e) {
     showDashboard();
     loadDashboardData();
   } else {
-    currentAdmin = { name: 'Admin', email: email };
-    localStorage.setItem('admin', JSON.stringify(currentAdmin));
-    showDashboard();
-    loadDashboardData();
-  } else {
     errorDiv.textContent = 'Invalid email or password';
   }
 }
