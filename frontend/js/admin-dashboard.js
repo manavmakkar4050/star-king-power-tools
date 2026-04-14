@@ -24,8 +24,18 @@ function handleLogin(e) {
   const password = document.getElementById('loginPassword').value;
   const errorDiv = document.getElementById('loginError');
 
-  // Dummy credentials
-  if (email === 'admin@starking.com' && password === 'admin123') {
+  // Admin credentials
+  const validAdmins = [
+    { email: 'admin@starking.com', password: 'admin123', name: 'Admin' },
+    { email: 'manav@starking.com', password: 'starking@2024', name: 'Manav' }
+  ];
+  const matched = validAdmins.find(a => a.email === email && a.password === password);
+  if (matched) {
+    currentAdmin = { name: matched.name, email: matched.email };
+    localStorage.setItem('admin', JSON.stringify(currentAdmin));
+    showDashboard();
+    loadDashboardData();
+  } else {
     currentAdmin = { name: 'Admin', email: email };
     localStorage.setItem('admin', JSON.stringify(currentAdmin));
     showDashboard();
