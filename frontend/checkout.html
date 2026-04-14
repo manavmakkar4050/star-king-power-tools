@@ -321,6 +321,16 @@
     let promoDiscount = 0;
     let selectedPayment = 'upi';
 
+    // Autofill personal details if user is logged in
+    const currentUser = JSON.parse(localStorage.getItem('starking_currentUser') || 'null');
+    if (currentUser) {
+      const nameParts = (currentUser.name || '').trim().split(' ');
+      document.getElementById('firstName').value = nameParts[0] || '';
+      document.getElementById('lastName').value  = nameParts.slice(1).join(' ') || '';
+      document.getElementById('email').value     = currentUser.email || '';
+      document.getElementById('phone').value     = currentUser.phone || '';
+    }
+
     // Init
     renderSummary();
 
