@@ -313,6 +313,7 @@
     </div>
   </footer>
 
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <script src="js/main.js"></script>
   <script>
     let currentStep = 1;
@@ -529,25 +530,90 @@
         state:   document.getElementById('state').value,
       };
 
+      // COD — skip Razorpay
+      if (selectedPayment === 'cod') {
+        try {
+          const res  = await fetch('/api/orders', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              user_id:        currentUser?.id || null,
+              customer_name:  `${firstName} ${lastName}`,
+              customer_email: email,
+              customer_phone: phone,
+              items:          cart,
+              subtotal, total,
+              delivery_address: deliveryAddress
+            })
+          });
+          const data = await res.json();
+          if (data.success) showSuccess(data.orderId, email, delivery);
+          else { alert(data.error || 'Order failed'); btn.textContent = '🔒 Place Order Securely'; btn.disabled = false; }
+        } catch {
+          alert('Network error. Please try again.');
+          btn.textContent = '🔒 Place Order Securely';
+          btn.disabled = false;
+        }
+        return;
+      }
+
+      // Online payment via Razorpay
       try {
-        const res  = await fetch('/api/orders', {
+        const orderRes = await fetch('/api/payment/create-order', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            user_id:        currentUser?.id || null,
-            customer_name:  `${firstName} ${lastName}`,
-            customer_email: email,
-            customer_phone: phone,
-            items:          cart,
-            subtotal, total,
-            delivery_address: deliveryAddress
-          })
+          body: JSON.stringify({ amount: total, receipt: `rcpt_${Date.now()}` })
         });
-        const data = await res.json();
-        if (data.success) showSuccess(data.orderId, email, delivery);
-        else { alert(data.error || 'Order failed'); btn.textContent = '🔒 Place Order Securely'; btn.disabled = false; }
-      } catch {
-        alert('Network error. Please try again.');
+        const orderData = await orderRes.json();
+        if (!orderData.success) throw new Error(orderData.error || 'Could not create payment order');
+
+        const options = {
+          key:         orderData.order.key_id,
+          amount:      orderData.order.amount,
+          currency:    orderData.order.currency,
+          name:        'Star King Power Tools',
+          description: 'Order Payment',
+          order_id:    orderData.order.id,
+          prefill: {
+            name:    `${firstName} ${lastName}`,
+            email:   email,
+            contact: phone
+          },
+          theme: { color: '#2d6a4f' },
+          handler: async function(response) {
+            // Verify payment and save order
+            const verifyRes = await fetch('/api/payment/verify', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                razorpay_order_id:   response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature:  response.razorpay_signature,
+                user_id:             currentUser?.id || null,
+                customer_name:       `${firstName} ${lastName}`,
+                customer_email:      email,
+                customer_phone:      phone,
+                items:               cart,
+                subtotal, total,
+                delivery_address:    deliveryAddress
+              })
+            });
+            const verifyData = await verifyRes.json();
+            if (verifyData.success) showSuccess(verifyData.orderId, email, delivery);
+            else alert('Payment verified but order save failed. Contact support.');
+          },
+          modal: {
+            ondismiss: function() {
+              btn.textContent = '🔒 Place Order Securely';
+              btn.disabled = false;
+            }
+          }
+        };
+
+        const rzp = new Razorpay(options);
+        rzp.open();
+      } catch(err) {
+        alert(err.message || 'Payment failed. Please try again.');
         btn.textContent = '🔒 Place Order Securely';
         btn.disabled = false;
       }
