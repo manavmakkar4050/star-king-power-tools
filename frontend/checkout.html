@@ -122,13 +122,13 @@
           <div class="form-group" style="margin-top:8px">
             <label>Delivery Speed</label>
             <div style="display:flex;flex-direction:column;gap:10px;margin-top:8px">
-              <label style="display:flex;align-items:center;gap:12px;padding:14px;border:2px solid var(--green-accent);border-radius:var(--radius);cursor:pointer;background:var(--green-muted)">
-                <input type="radio" name="delivery" value="standard" checked style="accent-color:var(--green-accent)">
-                <div><strong>Standard Delivery</strong> — 3–5 working days &nbsp;<span style="color:var(--green-primary);font-weight:700">FREE</span></div>
+              <label style="display:flex;align-items:center;gap:12px;padding:14px;border:2px solid var(--green-accent);border-radius:var(--radius);cursor:pointer;background:var(--green-muted);min-width:0;overflow:hidden">
+                <input type="radio" name="delivery" value="standard" checked style="accent-color:var(--green-accent);flex-shrink:0">
+                <div style="min-width:0;white-space:normal;word-break:break-word"><strong>Standard Delivery</strong> — 3–5 working days &nbsp;<span style="color:var(--green-primary);font-weight:700">FREE</span></div>
               </label>
-              <label style="display:flex;align-items:center;gap:12px;padding:14px;border:2px solid var(--border);border-radius:var(--radius);cursor:pointer" id="expressOption">
-                <input type="radio" name="delivery" value="express" style="accent-color:var(--green-accent)">
-                <div><strong>Express Delivery</strong> — Next working day &nbsp;<span style="color:var(--text-muted)">₹149</span></div>
+              <label style="display:flex;align-items:center;gap:12px;padding:14px;border:2px solid var(--border);border-radius:var(--radius);cursor:pointer;min-width:0;overflow:hidden" id="expressOption">
+                <input type="radio" name="delivery" value="express" style="accent-color:var(--green-accent);flex-shrink:0">
+                <div style="min-width:0;white-space:normal;word-break:break-word"><strong>Express Delivery</strong> — Next working day &nbsp;<span style="color:var(--text-muted)">₹149</span></div>
               </label>
             </div>
           </div>
