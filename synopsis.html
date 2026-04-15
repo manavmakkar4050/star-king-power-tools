@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  body { font-family: 'Times New Roman', serif; margin: 60px; font-size: 13pt; line-height: 1.6; color: #000; }
+  h1 { text-align: center; font-size: 18pt; text-transform: uppercase; }
+  h2 { font-size: 14pt; text-transform: uppercase; border-bottom: 1px solid #000; padding-bottom: 4px; margin-top: 28px; }
+  h3 { font-size: 13pt; margin-top: 16px; }
+  .center { text-align: center; }
+  .meta { text-align: center; margin-bottom: 30px; font-size: 12pt; }
+  ul { margin: 6px 0 10px 20px; }
+  li { margin-bottom: 4px; }
+  p { margin: 8px 0; text-align: justify; }
+  .divider { border: none; border-top: 2px solid #000; margin: 20px 0; }
+</style>
+</head>
+<body>
+
+<h1>Major Project Synopsis</h1>
+<hr class="divider">
+<div class="meta">
+  <p><strong>Project Title:</strong> Secure &amp; Scalable Smart Full-Stack E-Commerce Website</p>
+  <p><strong>Student Name:</strong> Manav Makkar</p>
+  <p><strong>Course:</strong> Bachelor of Computer Applications (BCA) — Final Year</p>
+  <p><strong>Technology Stack:</strong> Node.js, Express.js, MySQL, Vanilla JavaScript, HTML5, CSS3, Razorpay</p>
+</div>
+<hr class="divider">
+
+<h2>1. Introduction</h2>
+<p>The rapid growth of digital commerce has transformed the way businesses operate and consumers shop. However, a large number of existing e-commerce platforms — especially those built for small and medium businesses — suffer from critical shortcomings including weak authentication mechanisms, poor scalability under high traffic, insecure payment handling, and the absence of intelligent user assistance features.</p>
+<p>Common problems observed in existing systems include:</p>
+<ul>
+  <li>Lack of server-side input validation leading to SQL Injection and XSS vulnerabilities</li>
+  <li>Monolithic architectures that fail to scale under concurrent user load</li>
+  <li>Poorly designed database schemas causing performance bottlenecks</li>
+  <li>No real-time order tracking or admin visibility</li>
+  <li>Absence of smart assistance tools like chatbots for user guidance</li>
+  <li>Dependency on outdated or insecure payment flows</li>
+</ul>
+<p>This project — <strong>Star King Power Tools E-Commerce Platform</strong> — is developed as a solution to these challenges. It is a fully functional, cloud-deployed, full-stack web application built for a real power tools business.</p>
+<p>Key highlights of the system:</p>
+<ul>
+  <li>RESTful API backend built on Node.js and Express.js</li>
+  <li>Secure user authentication with password hashing</li>
+  <li>Razorpay payment gateway integration (test mode)</li>
+  <li>Rule-based JavaScript chatbot for customer assistance</li>
+  <li>Admin dashboard with real-time data management</li>
+  <li>Cloud deployment on Render with Aiven MySQL database</li>
+  <li>Responsive UI compatible across all devices</li>
+</ul>
+
+<h2>2. Main and Sub Points</h2>
+<h3>A. Secure User Authentication System</h3>
+<ul>
+  <li>User registration and login with SHA-256 password hashing</li>
+  <li>Session management using localStorage tokens</li>
+  <li>Protected routes for authenticated users only</li>
+</ul>
+<h3>B. Product Management System</h3>
+<ul>
+  <li>Dynamic product catalog loaded from MySQL database</li>
+  <li>Category-based filtering and keyword search</li>
+  <li>Detailed product pages with image gallery and specifications</li>
+</ul>
+<h3>C. Cart &amp; Order Processing</h3>
+<ul>
+  <li>Persistent shopping cart using browser localStorage</li>
+  <li>GST calculation (18%) applied automatically</li>
+  <li>Multi-step checkout with address and delivery options</li>
+  <li>Order confirmation with unique order ID generation</li>
+</ul>
+<h3>D. Payment Gateway Integration</h3>
+<ul>
+  <li>Razorpay integration supporting UPI, Credit/Debit Card, Net Banking</li>
+  <li>Server-side payment signature verification using HMAC-SHA256</li>
+  <li>Cash on Delivery as fallback option</li>
+  <li>Secure order saving post payment verification</li>
+</ul>
+<h3>E. Admin Dashboard</h3>
+<ul>
+  <li>Separate admin panel with credential-based access</li>
+  <li>Real-time customer, order, product, and transaction management</li>
+  <li>CRUD operations on product catalog</li>
+  <li>Order status update functionality</li>
+</ul>
+<h3>F. Chatbot System</h3>
+<ul>
+  <li>Rule-based chatbot built in vanilla JavaScript</li>
+  <li>Handles FAQs, product queries, order help, and contact info</li>
+  <li>No external API dependency — fully client-side</li>
+</ul>
+<h3>G. Performance &amp; Scalability Features</h3>
+<ul>
+  <li>MySQL connection pooling for concurrent request handling</li>
+  <li>Static file serving via Express for fast asset delivery</li>
+  <li>Cloud-hosted on Render with auto-deploy from GitHub</li>
+  <li>SSL-enabled Aiven MySQL database</li>
+</ul>
+
+<h2>3. Key Features (Detailed)</h2>
+<h3>3.1 User Authentication &amp; Security</h3>
+<ul>
+  <li>Passwords stored as SHA-256 hashed strings — never in plain text</li>
+  <li>Input sanitization on both client and server side to prevent XSS attacks</li>
+  <li>Parameterized SQL queries using mysql2 prepared statements to prevent SQL Injection</li>
+  <li>User session stored securely in localStorage with structured JSON tokens</li>
+</ul>
+<h3>3.2 Product Browsing, Filtering &amp; Search</h3>
+<ul>
+  <li>Products loaded dynamically from MySQL via /api/products REST endpoint</li>
+  <li>Client-side filtering by category, price range, and keyword</li>
+  <li>Fallback to static products-data.json if API is unavailable</li>
+  <li>Product detail pages with multiple images, description, and add-to-cart</li>
+</ul>
+<h3>3.3 Shopping Cart System</h3>
+<ul>
+  <li>Cart persisted in localStorage — survives page refresh</li>
+  <li>Real-time quantity update, item removal, and cart total recalculation</li>
+  <li>GST (18%) and optional express delivery charge (₹149) applied dynamically</li>
+  <li>Promo code system with percentage-based discounts</li>
+</ul>
+<h3>3.4 Razorpay Payment Integration</h3>
+<ul>
+  <li>Backend creates Razorpay order via /api/payment/create-order</li>
+  <li>Frontend opens Razorpay checkout popup with prefilled user details</li>
+  <li>On success, payment signature verified server-side using HMAC-SHA256</li>
+  <li>Verified orders saved to MySQL with razorpay_order_id and razorpay_payment_id</li>
+  <li>COD orders bypass Razorpay and are saved directly</li>
+</ul>
+<h3>3.5 Order Tracking System</h3>
+<ul>
+  <li>Orders stored in MySQL with status field (pending, paid, shipped, delivered)</li>
+  <li>Users can view order history on their profile page</li>
+  <li>Admin can update order status from the dashboard</li>
+</ul>
+<h3>3.6 Admin Panel (CRUD Operations)</h3>
+<ul>
+  <li>Separate admin login with credential validation</li>
+  <li>Dashboard shows total orders, revenue, customers, and products</li>
+  <li>Full CRUD on product catalog — add, edit, delete products</li>
+  <li>View all customers, orders, and transaction records</li>
+</ul>
+<h3>3.7 Rule-Based Chatbot</h3>
+<ul>
+  <li>Keyword-matching engine built in pure JavaScript</li>
+  <li>Responds to queries about products, pricing, delivery, returns, and contact</li>
+  <li>Floating widget accessible on all pages — no server calls, instant response</li>
+</ul>
+<h3>3.8 Security Measures</h3>
+<ul>
+  <li>CORS configured on Express to restrict cross-origin requests</li>
+  <li>Environment variables used for all sensitive credentials (.env file)</li>
+  <li>.gitignore ensures secrets are never pushed to version control</li>
+  <li>SSL mode enabled on database connection</li>
+  <li>Razorpay webhook signature verification prevents payment tampering</li>
+</ul>
+<h3>3.9 Performance Optimization</h3>
+<ul>
+  <li>MySQL connection pool (connectionLimit: 10) handles concurrent requests efficiently</li>
+  <li>Static assets served directly by Express without additional overhead</li>
+  <li>Optimized images for faster page load</li>
+</ul>
+<h3>3.10 Scalable Database Design</h3>
+<ul>
+  <li>Four normalized tables: users, orders, products, contacts</li>
+  <li>JSON columns used for flexible storage of cart items and delivery addresses</li>
+  <li>BIGINT primary keys using Date.now() for distributed-safe ID generation</li>
+  <li>Tables auto-created on server startup via initDB() — zero manual setup</li>
+</ul>
+
+<h2>4. Advantages</h2>
+<h3>For Users</h3>
+<ul>
+  <li>Fast, responsive shopping experience on any device</li>
+  <li>Secure login and personal data protection</li>
+  <li>Real-time cart updates and order confirmation</li>
+  <li>Multiple payment options including UPI, card, and COD</li>
+  <li>Instant chatbot assistance without waiting for support</li>
+</ul>
+<h3>For Admin</h3>
+<ul>
+  <li>Centralized dashboard to manage entire business operations</li>
+  <li>Real-time visibility into orders, customers, and revenue</li>
+  <li>Easy product catalog management without technical knowledge</li>
+  <li>Order status management from a single interface</li>
+</ul>
+<h3>For Business</h3>
+<ul>
+  <li>Fully cloud-deployed — accessible 24/7 from anywhere</li>
+  <li>Low infrastructure cost using free-tier cloud services</li>
+  <li>Auto-deploy pipeline from GitHub to Render reduces deployment effort</li>
+  <li>Scalable architecture ready to handle growing traffic</li>
+  <li>Professional online presence for the brand</li>
+</ul>
+
+<h2>5. Challenges and Limitations</h2>
+<ul>
+  <li><strong>Payment Gateway in Test Mode:</strong> Razorpay is currently in test mode. Live transactions require business KYC verification.</li>
+  <li><strong>Hosting Performance Constraints:</strong> Free tier on Render causes cold start delay of 30–50 seconds after inactivity.</li>
+  <li><strong>Security Implementation Complexity:</strong> Managing HMAC-SHA256 verification and environment variables across local and cloud environments required careful configuration.</li>
+  <li><strong>No AI-Based Recommendation System:</strong> The chatbot is rule-based and does not use machine learning. Product recommendations are not personalized.</li>
+  <li><strong>Scalability Ceiling:</strong> Single-instance deployment does not support horizontal scaling without a paid plan or containerized deployment.</li>
+  <li><strong>Image Storage:</strong> Product images are stored as static files. A cloud storage solution like AWS S3 would be needed for dynamic uploads.</li>
+</ul>
+
+<h2>6. Key Application Areas</h2>
+<ul>
+  <li>Online Retail Stores — Any product-based business establishing an online presence</li>
+  <li>Small &amp; Medium Businesses — Cost-effective solution with minimal infrastructure requirements</li>
+  <li>Startups — Rapid deployment capability with GitHub-to-cloud auto-deploy pipeline</li>
+  <li>Industrial &amp; B2B Commerce — Suitable for tools, equipment, and hardware businesses</li>
+  <li>Educational Demonstration — Demonstrates full-stack development, REST APIs, payment integration, and cloud deployment</li>
+  <li>Scalable E-Commerce Platforms — Foundation architecture extendable with microservices and CDN</li>
+</ul>
+
+<h2>7. Conclusion</h2>
+<p>The <strong>Star King Power Tools E-Commerce Platform</strong> is a real-world, cloud-deployed full-stack web application that demonstrates the complete software development lifecycle — from requirement analysis and database design to frontend development, backend API development, payment integration, and cloud deployment.</p>
+<p>The system successfully addresses the core problems of existing e-commerce platforms by implementing secure authentication, parameterized database queries, server-side payment verification, and a scalable RESTful architecture. It is not a prototype — it is a live, functional system accessible on the internet.</p>
+<p><strong>Future Scope:</strong></p>
+<ul>
+  <li>Integration of AI-based product recommendation engine</li>
+  <li>Email notification system for order confirmation</li>
+  <li>Live order tracking with delivery partner API</li>
+  <li>Mobile application using React Native</li>
+  <li>Upgrade to microservices architecture for enterprise-scale deployment</li>
+  <li>Integration of inventory management and supplier portal</li>
+</ul>
+
+<h2>8. Technologies &amp; References</h2>
+<h3>Backend</h3>
+<ul>
+  <li>Node.js (v18+) — Server runtime</li>
+  <li>Express.js (v4.18) — Web framework and REST API</li>
+  <li>mysql2 (v3.20) — MySQL driver with promise support and prepared statements</li>
+  <li>dotenv (v17) — Environment variable management</li>
+  <li>cors — Cross-Origin Resource Sharing middleware</li>
+  <li>Razorpay Node SDK (v2.9) — Payment gateway integration</li>
+  <li>crypto (built-in) — HMAC-SHA256 signature verification</li>
+</ul>
+<h3>Frontend</h3>
+<ul>
+  <li>HTML5, CSS3 — Structure and styling</li>
+  <li>Vanilla JavaScript (ES6+) — Client-side logic</li>
+  <li>localStorage API — Cart and session persistence</li>
+  <li>Razorpay Checkout.js — Payment popup</li>
+</ul>
+<h3>Database &amp; Hosting</h3>
+<ul>
+  <li>MySQL 8.0 — Relational database</li>
+  <li>Aiven Cloud MySQL — Managed cloud database with SSL</li>
+  <li>Render.com — Cloud hosting with auto-deploy</li>
+  <li>GitHub — Version control and CI/CD pipeline</li>
+</ul>
+<h3>References</h3>
+<ul>
+  <li>Razorpay Developer Documentation — https://razorpay.com/docs</li>
+  <li>Express.js Official Documentation — https://expressjs.com</li>
+  <li>MySQL2 npm Documentation — https://www.npmjs.com/package/mysql2</li>
+  <li>Aiven MySQL Documentation — https://aiven.io/docs/products/mysql</li>
+  <li>MDN Web Docs — https://developer.mozilla.org</li>
+</ul>
+
+<hr class="divider">
+<p class="center"><em>Synopsis prepared for BCA Final Year Major Project Submission</em><br>
+<em>Project: Star King Power Tools — Secure &amp; Scalable Smart Full-Stack E-Commerce Website</em></p>
+
+</body>
+</html>

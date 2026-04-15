@@ -1,6 +1,8 @@
 const express = require('express');
 const router  = express.Router();
 const { pool } = require('../db');
+const path = require('path');
+const fs = require('fs');
 
 // GET /api/admin/users
 router.get('/users', async (req, res) => {
@@ -26,6 +28,18 @@ router.get('/orders', async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Could not fetch orders' });
+  }
+});
+
+// PUT /api/admin/orders/:id/status (also support PATCH)
+router.put('/orders/:id/status', async (req, res) => {
+  const { status } = req.body;
+  try {
+    await pool.execute('UPDATE orders SET status = ? WHERE id = ?', [status, req.params.id]);
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Could not update order status' });
   }
 });
 
@@ -94,6 +108,29 @@ router.get('/stats', async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Could not fetch stats' });
+  }
+});
+
+// POST /api/admin/seed-products — seed DB from products-data.json
+router.post('/seed-products', async (req, res) => {
+  try {
+    const dataPath = path.join(__dirname, '../../frontend/products-data.json');
+    const { products } = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
+    let inserted = 0;
+    for (const p of products) {
+      const [existing] = await pool.execute('SELECT id FROM products WHERE id = ?', [p.id]);
+      if (existing.length === 0) {
+        await pool.execute(
+          'INSERT INTO products (id, model, name, category, price, description, images) VALUES (?, ?, ?, ?, ?, ?, ?)',
+          [p.id, p.name, p.name, p.category, p.price, p.description || '', JSON.stringify([p.image_url || ''])]
+        );
+        inserted++;
+      }
+    }
+    res.json({ success: true, inserted, total: products.length });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Could not seed products' });
   }
 });
 

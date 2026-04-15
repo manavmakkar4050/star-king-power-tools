@@ -509,6 +509,23 @@ async function deleteProduct(productId) {
   }
 }
 
+async function seedProducts() {
+  if (!confirm('Seed the database with products from products-data.json?')) return;
+  try {
+    const response = await fetch('/api/admin/seed-products', { method: 'POST' });
+    const result = await response.json();
+    if (result.success) {
+      alert(`Seeded ${result.inserted} new products (${result.total} total in file).`);
+      loadProducts();
+      loadDashboardData();
+    } else {
+      alert('Seed failed: ' + result.error);
+    }
+  } catch (err) {
+    alert('Error seeding products: ' + err.message);
+  }
+}
+
 async function saveProduct(e) {
   e.preventDefault();
   const model = document.getElementById('productModel').value;
