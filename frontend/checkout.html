@@ -144,32 +144,23 @@
           <h3>💳 Payment Method</h3>
 
           <div class="payment-options">
-            <label class="payment-option selected" onclick="selectPayment('upi', this)">
-              <input type="radio" name="payment" value="upi" checked />
-              <span class="pay-icon">📱</span>
-              <div class="pay-info">
-                <strong>UPI Payment</strong>
-                <small>GPay, PhonePe, Paytm, BHIM UPI</small>
-              </div>
-              <img src="https://img.icons8.com/color/48/bhim-upi.png" alt="UPI" style="height:32px;margin-left:auto" onerror="this.style.display='none'" />
-            </label>
-
-            <label class="payment-option" onclick="selectPayment('card', this)">
-              <input type="radio" name="payment" value="card" />
+            <label class="payment-option" onclick="selectPayment('razorpay', this)">
+              <input type="radio" name="payment" value="razorpay" />
               <span class="pay-icon">💳</span>
               <div class="pay-info">
-                <strong>Credit / Debit Card</strong>
-                <small>Visa, Mastercard, RuPay</small>
+                <strong>Pay with Razorpay</strong>
+                <small>Credit / Debit Card, Net Banking</small>
               </div>
             </label>
 
-            <label class="payment-option" onclick="selectPayment('netbanking', this)">
-              <input type="radio" name="payment" value="netbanking" />
-              <span class="pay-icon">🏦</span>
+            <label class="payment-option" onclick="selectPayment('upi', this)">
+              <input type="radio" name="payment" value="upi" />
+              <span class="pay-icon">📱</span>
               <div class="pay-info">
-                <strong>Net Banking</strong>
-                <small>All major banks supported</small>
+                <strong>UPI / QR Code</strong>
+                <small>Scan & pay via any UPI app</small>
               </div>
+              <img src="https://img.icons8.com/color/48/bhim-upi.png" alt="UPI" style="height:32px;margin-left:auto" onerror="this.style.display='none'" />
             </label>
 
             <label class="payment-option" onclick="selectPayment('cod', this)">
@@ -182,50 +173,18 @@
             </label>
           </div>
 
-          <!-- UPI Fields -->
-          <div id="upiFields" class="card-fields visible">
-            <div class="form-group">
-              <label>UPI ID *</label>
-              <input type="text" id="upiId" placeholder="yourname@upi" />
-            </div>
-            <p style="font-size:0.78rem;color:var(--text-muted);margin-top:4px">You will receive a payment request on your UPI app after placing the order.</p>
-          </div>
-
-          <!-- Card Fields -->
-          <div id="cardFields" class="card-fields">
-            <div class="form-group">
-              <label>Card Number *</label>
-              <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" oninput="formatCard(this)" />
-            </div>
-            <div class="form-grid-2">
-              <div class="form-group">
-                <label>Expiry (MM/YY) *</label>
-                <input type="text" id="cardExpiry" placeholder="MM/YY" maxlength="5" oninput="formatExpiry(this)" />
-              </div>
-              <div class="form-group">
-                <label>CVV *</label>
-                <input type="password" id="cardCvv" placeholder="•••" maxlength="3" />
-              </div>
-            </div>
-            <div class="form-group">
-              <label>Cardholder Name *</label>
-              <input type="text" id="cardName" placeholder="Name as on card" />
-            </div>
-          </div>
-
-          <!-- Net Banking -->
-          <div id="netbankingFields" class="card-fields">
-            <div class="form-group">
-              <label>Select Bank *</label>
-              <select id="bank" style="width:100%;padding:12px;border:1px solid var(--border);border-radius:var(--radius);font-family:inherit;font-size:0.9rem">
-                <option value="">Select your bank</option>
-                <option>State Bank of India</option><option>HDFC Bank</option><option>ICICI Bank</option><option>Axis Bank</option><option>Punjab National Bank</option><option>Bank of Baroda</option><option>Kotak Mahindra Bank</option><option>Yes Bank</option><option>Canara Bank</option><option>Other</option>
-              </select>
+          <!-- UPI QR -->
+          <div id="upiFields" class="card-fields" style="display:none">
+            <div style="text-align:center;padding:20px">
+              <p style="font-size:0.9rem;color:var(--text-mid);margin-bottom:12px">Scan the QR code below with any UPI app to pay</p>
+              <div id="upiQrContainer" style="display:inline-block;padding:12px;background:#fff;border:2px solid var(--border);border-radius:8px"></div>
+              <p style="margin-top:12px;font-size:0.85rem;color:var(--text-muted)">UPI ID: <strong>makkarmanav16@gmail.com</strong></p>
+              <p style="font-size:0.78rem;color:var(--text-muted);margin-top:4px">After payment, click "Review Order" to continue.</p>
             </div>
           </div>
 
           <!-- COD -->
-          <div id="codFields" class="card-fields">
+          <div id="codFields" class="card-fields" style="display:none">
             <div style="background:var(--green-muted);padding:16px;border-radius:var(--radius);border-left:4px solid var(--green-accent)">
               <p style="font-size:0.88rem;color:var(--text-mid)">💵 <strong>Cash on Delivery:</strong> Pay when your order arrives at your doorstep. Our delivery partner will collect the exact amount.</p>
               <p style="font-size:0.78rem;color:var(--text-muted);margin-top:8px">Note: COD available on orders under ₹15,000.</p>
@@ -314,12 +273,13 @@
   </footer>
 
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script src="js/main.js"></script>
   <script>
     let currentStep = 1;
     let cart = JSON.parse(localStorage.getItem('starking_cart') || '[]');
     let promoDiscount = 0;
-    let selectedPayment = 'upi';
+    let selectedPayment = 'razorpay';
 
     // Autofill personal details if user is logged in
     const currentUser = JSON.parse(localStorage.getItem('starking_currentUser') || 'null');
@@ -412,20 +372,7 @@
         if (!/^[0-9]{6}$/.test(pi)) { alert('Please enter a valid 6-digit PIN code.'); return false; }
       }
       if (step === 3) {
-        if (selectedPayment === 'card') {
-          const cn = document.getElementById('cardNumber').value.replace(/\s/g, '');
-          const ce = document.getElementById('cardExpiry').value;
-          const cv = document.getElementById('cardCvv').value;
-          const ca = document.getElementById('cardName').value.trim();
-          if (!cn || cn.length < 16 || !ce || !cv || !ca) { alert('Please fill all card details.'); return false; }
-        }
-        if (selectedPayment === 'upi') {
-          const ui = document.getElementById('upiId').value.trim();
-          if (!ui || !ui.includes('@')) { alert('Please enter a valid UPI ID (e.g., name@upi).'); return false; }
-        }
-        if (selectedPayment === 'netbanking') {
-          if (!document.getElementById('bank').value) { alert('Please select your bank.'); return false; }
-        }
+        if (!selectedPayment) { alert('Please select a payment method.'); return false; }
       }
       return true;
     }
@@ -441,7 +388,7 @@
       const pi = document.getElementById('pincode').value;
       const state = document.getElementById('state').value;
       const del = document.querySelector('[name="delivery"]:checked')?.value === 'express' ? 'Express (Next day, ₹149)' : 'Standard (3–5 days, FREE)';
-      const payMap = { upi: 'UPI — ' + (document.getElementById('upiId').value || ''), card: 'Credit/Debit Card (ending ****' + (document.getElementById('cardNumber').value.slice(-4) || '0000') + ')', netbanking: 'Net Banking — ' + (document.getElementById('bank').value || ''), cod: 'Cash on Delivery' };
+      const payMap = { razorpay: 'Razorpay (Card / Net Banking)', upi: 'UPI QR — makkarmanav16@gmail.com', cod: 'Cash on Delivery' };
 
       document.getElementById('reviewContent').innerHTML = `
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
@@ -471,10 +418,24 @@
       selectedPayment = type;
       document.querySelectorAll('.payment-option').forEach(o => o.classList.remove('selected'));
       el.classList.add('selected');
-      document.querySelectorAll('.card-fields').forEach(f => { f.classList.remove('visible'); f.style.display = 'none'; });
-      const map = { upi: 'upiFields', card: 'cardFields', netbanking: 'netbankingFields', cod: 'codFields' };
-      const target = document.getElementById(map[type]);
-      if (target) { target.classList.add('visible'); target.style.display = 'block'; }
+      document.querySelectorAll('.card-fields').forEach(f => { f.style.display = 'none'; });
+      const map = { upi: 'upiFields', cod: 'codFields' };
+      if (map[type]) document.getElementById(map[type]).style.display = 'block';
+
+      // Generate QR when UPI selected
+      if (type === 'upi') generateUpiQr();
+    }
+
+    function generateUpiQr() {
+      const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
+      const delivery = document.querySelector('[name="delivery"]:checked')?.value === 'express' ? 149 : 0;
+      const gst      = Math.round(subtotal * 0.18);
+      const total    = subtotal + gst + delivery - promoDiscount;
+
+      const upiUrl = `upi://pay?pa=makkarmanav16@gmail.com&pn=Star%20King%20Power%20Tools&am=${total}&cu=INR&tn=StarKing%20Order`;
+      const container = document.getElementById('upiQrContainer');
+      container.innerHTML = '';
+      new QRCode(container, { text: upiUrl, width: 200, height: 200, correctLevel: QRCode.CorrectLevel.H });
     }
 
     function formatCard(input) {
@@ -540,8 +501,8 @@
         state:   document.getElementById('state').value,
       };
 
-      // COD — skip Razorpay
-      if (selectedPayment === 'cod') {
+      // COD or UPI QR — save order directly
+      if (selectedPayment === 'cod' || selectedPayment === 'upi') {
         try {
           const res  = await fetch('/api/orders', {
             method: 'POST',
@@ -567,7 +528,7 @@
         return;
       }
 
-      // Online payment via Razorpay
+      // Razorpay (cards / net banking)
       try {
         const orderRes = await fetch('/api/payment/create-order', {
           method: 'POST',

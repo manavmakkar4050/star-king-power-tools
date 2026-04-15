@@ -105,7 +105,7 @@ async function loadDashboardData() {
 
     // Calculate stats
     const totalOrders = allOrders.length;
-    const totalRevenue = allOrders.reduce((sum, o) => sum + (o.total || 0), 0);
+    const totalRevenue = allOrders.reduce((sum, o) => sum + (parseFloat(o.total) || 0), 0);
     const totalCustomers = allCustomers.length;
     const totalProducts = allProducts.length;
     
