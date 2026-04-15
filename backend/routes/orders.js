@@ -13,6 +13,17 @@ router.post('/', async (req, res) => {
       'INSERT INTO orders (id, user_id, customer_name, customer_email, customer_phone, items, subtotal, total, delivery_address) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
       [id, user_id || null, customer_name, customer_email, customer_phone || '', JSON.stringify(items), subtotal, total, JSON.stringify(delivery_address || {})]
     );
+
+    // Reduce stock for each ordered item
+    for (const item of items) {
+      if (item.id) {
+        await pool.execute(
+          'UPDATE products SET stock = GREATEST(0, stock - ?) WHERE id = ?',
+          [item.quantity || 1, item.id]
+        );
+      }
+    }
+
     res.json({ success: true, orderId: id });
   } catch (err) {
     console.error(err);

@@ -56,11 +56,16 @@ async function initDB() {
       name        VARCHAR(255) NOT NULL,
       category    VARCHAR(100) NOT NULL,
       price       DECIMAL(10,2) NOT NULL,
+      stock       INT DEFAULT 0,
       description TEXT,
       images      JSON,
       created_at  DATETIME DEFAULT CURRENT_TIMESTAMP
     )
   `);
+  // Add stock column if it doesn't exist yet (migration)
+  try {
+    await pool.execute('ALTER TABLE products ADD COLUMN stock INT DEFAULT 0');
+  } catch (e) { /* column already exists, ignore */ }
   console.log('Database tables ready');
 }
 

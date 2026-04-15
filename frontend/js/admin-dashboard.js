@@ -457,7 +457,7 @@ async function loadProducts() {
         <td>${product.name}</td>
         <td>${product.category}</td>
         <td>₹${(product.price || 0).toLocaleString('en-IN')}</td>
-        <td>-</td>
+        <td>${product.stock ?? '-'}</td>
         <td>
           <button class="btn-secondary" onclick="editProduct(${product.id})">Edit</button>
           <button class="btn-danger" onclick="deleteProduct(${product.id})">Delete</button>
@@ -470,8 +470,11 @@ async function loadProducts() {
   }
 }
 
+let editingProductId = null;
+
 function openProductModal(productId = null) {
   document.getElementById('productForm').reset();
+  editingProductId = productId || null;
   if (productId) {
     document.getElementById('productModalTitle').textContent = 'Edit Product';
     const product = allProducts.find(p => p.id === productId);
@@ -480,7 +483,7 @@ function openProductModal(productId = null) {
       document.getElementById('productName').value = product.name;
       document.getElementById('productCategory').value = product.category;
       document.getElementById('productPrice').value = product.price;
-      document.getElementById('productStock').value = 0;
+      document.getElementById('productStock').value = product.stock || 0;
       document.getElementById('productDescription').value = product.description || '';
     }
   } else {
@@ -532,17 +535,28 @@ async function saveProduct(e) {
   const name = document.getElementById('productName').value;
   const category = document.getElementById('productCategory').value;
   const price = parseFloat(document.getElementById('productPrice').value);
+  const stock = parseInt(document.getElementById('productStock').value) || 0;
   const description = document.getElementById('productDescription').value;
-  
+
   try {
-    const response = await fetch('/api/admin/products', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model, name, category, price, description, images: [] })
-    });
+    let response;
+    if (editingProductId) {
+      response = await fetch(`/api/admin/products/${editingProductId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ model, name, category, price, stock, description })
+      });
+    } else {
+      response = await fetch('/api/admin/products', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ model, name, category, price, stock, description, images: [] })
+      });
+    }
 
     if (response.ok) {
-      alert('Product added successfully');
+      alert(editingProductId ? 'Product updated successfully' : 'Product added successfully');
+      editingProductId = null;
       closeModal('productModal');
       loadProducts();
       loadDashboardData();

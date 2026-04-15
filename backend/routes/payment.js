@@ -65,6 +65,17 @@ router.post('/verify', async (req, res) => {
         JSON.stringify(delivery_address || {})
       ]
     );
+
+    // Reduce stock for each ordered item
+    for (const item of items) {
+      if (item.id) {
+        await pool.execute(
+          'UPDATE products SET stock = GREATEST(0, stock - ?) WHERE id = ?',
+          [item.quantity || 1, item.id]
+        );
+      }
+    }
+
     res.json({ success: true, orderId: id });
   } catch (err) {
     console.error('Order save error:', err);
