@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wishlist — Star King Power Tools</title>
+  <link rel="stylesheet" href="css/style.css?v=2" />
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="index.html" class="nav-logo">
+      <img src="../images/starkinglogo2.png" alt="Star King" class="logo-img" />
+      <span>STAR <span>KING</span></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="products.html">Products</a></li>
+      <li><a href="about.html">About Us</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="wishlist.html" class="active">♥ Wishlist <span id="wishlistBadge" class="cart-badge">0</span></a></li>
+      <li><a href="cart.html" class="nav-cart">Cart <span class="cart-badge">0</span></a></li>
+      <li class="nav-auth-zone"></li>
+    </ul>
+    <div class="hamburger"><span></span><span></span><span></span></div>
+  </nav>
+
+  <div class="page-header">
+    <h1>My <em>Wishlist</em></h1>
+    <p>Products you've saved for later.</p>
+  </div>
+
+  <section class="section" style="padding-top:40px">
+    <div id="wishlistGrid" class="products-grid">
+      <div class="loading"><div class="spinner"></div> Loading...</div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="nav-logo"><img src="../images/starkinglogo2.png" alt="Star King" class="logo-img" /><span>STAR <span>KING</span></span></div>
+        <p>Star King Power Tools & Spare Parts Pvt. Ltd.<br>Gill Chownk, Gill Road, Miller Ganj, Ludhiana</p>
+      </div>
+      <div class="footer-col"><h4>Quick Links</h4><a href="index.html">Home</a><a href="products.html">Products</a><a href="about.html">About</a><a href="contact.html">Contact</a></div>
+      <div class="footer-col"><h4>Contact</h4><a href="tel:18001020375">📞 1800 102 0375</a><a href="mailto:customercare@starkingpowertools.com">✉️ Email Us</a></div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 Star King Power Tools. All rights reserved.</span>
+    </div>
+  </footer>
+
+  <script src="js/main.js?v=2"></script>
+  <script>
+    const allProducts = [
+      { id: 1,  model: 'SK-515', name: 'Impact Drill',        category: 'Drills',   price: 3299, images: ['../images/impact_drill_1.png',        '../images/impact_drill_2.png'],        description: 'Powerful impact drill for heavy-duty drilling and fastening' },
+      { id: 2,  model: 'SK-517', name: 'Electric Screwdriver', category: 'Drills',   price: 1699, images: ['../images/electric_screwdriver_1.png', '../images/electric_screwdriver_2.png'], description: 'Compact electric screwdriver for precision work' },
+      { id: 3,  model: 'SK-502', name: 'Angle Grinder',        category: 'Grinders', price: 1499, images: ['../images/angle_grinder_1.png',        '../images/angle_grinder_2.png'],        description: 'Versatile angle grinder for cutting and grinding' },
+      { id: 4,  model: 'SK-531', name: 'Marble Cutter',        category: 'Grinders', price: 6999, images: ['../images/marble_cutter_1.png',        '../images/marble_cutter_2.png'],        description: 'Precision marble and tile cutting machine' },
+      { id: 5,  model: 'SK-533', name: 'Circular Saw',         category: 'Saws',     price: 3899, images: ['../images/circular_saw_1.png',         '../images/circular_saw_2.png'],         description: 'High-speed circular saw for clean cuts' },
+      { id: 6,  model: 'SK-535', name: 'Jig Saw',              category: 'Saws',     price: 2299, images: ['../images/jig_saw_1.png',              '../images/jig_saw_2.png'],              description: 'Precision jig saw for intricate cutting' },
+      { id: 7,  model: 'SK-538', name: 'Cut Off Machine',      category: 'Saws',     price: 9999, images: ['../images/cut_off_machine_1.png',      '../images/cut_off_machine_2.png'],      description: 'Industrial cut-off machine for metal and masonry' },
+      { id: 8,  model: 'SK-542', name: 'Demolition Hammer',    category: 'Hammers',  price: 5999, images: ['../images/demolition_hammer_1.png',    '../images/demolition_hammer_2.png'],    description: 'Heavy-duty demolition hammer for tough jobs' },
+      { id: 9,  model: 'SK-522', name: 'Rotary Hammer',        category: 'Hammers',  price: 5599, images: ['../images/rotary_hammer_1.png',        '../images/rotary_hammer_2.png'],        description: 'Powerful rotary hammer for concrete and masonry' },
+      { id: 10, model: 'SK-537', name: 'Electric Mixer',       category: 'Drills',   price: 4499, images: ['../images/electric_mixer_1.png',       '../images/electric_mixer_2.png'],       description: 'Heavy-duty electric mixer for concrete and mortar' },
+      { id: 11, model: 'SK-527', name: 'Electric Blower',      category: 'Drills',   price: 1999, images: ['../images/electric_blower_1.png',      '../images/electric_blower_2.png'],      description: 'Powerful electric blower for cleaning and air circulation' },
+      { id: 12, model: 'SK-525', name: 'Electric Planner',     category: 'Saws',     price: 2799, images: ['../images/electric_planner_1.png',     '../images/electric_planner_2.png'],     description: 'Precision electric planner for woodworking' },
+    ];
+
+    function renderWishlist() {
+      const wishlist = JSON.parse(localStorage.getItem('starking_wishlist') || '[]');
+      const grid = document.getElementById('wishlistGrid');
+      const badge = document.getElementById('wishlistBadge');
+      badge.textContent = wishlist.length;
+
+      if (!wishlist.length) {
+        grid.innerHTML = `
+          <div style="grid-column:1/-1;text-align:center;padding:80px 20px;color:var(--text-muted)">
+            <div style="font-size:4rem;margin-bottom:16px">♡</div>
+            <h3 style="font-size:2rem;color:var(--green-dark);margin-bottom:12px">Your wishlist is empty</h3>
+            <p>Browse products and click ♡ to save them here.</p>
+            <br>
+            <a href="products.html" class="btn-primary">Browse Products →</a>
+          </div>`;
+        return;
+      }
+
+      const items = allProducts.filter(p => wishlist.includes(p.id));
+      grid.innerHTML = items.map((p, i) => `
+        <div class="product-card visible" style="transition-delay:${i*0.08}s">
+          <div class="product-img-wrap">
+            <img class="product-img" src="${p.images[0]}" alt="${p.name}" loading="lazy" />
+          </div>
+          <div class="product-body">
+            <span class="product-category">${p.category}</span>
+            <h3 class="product-name">${p.name} <small class="product-model">(${p.model})</small></h3>
+            <p class="product-desc">${p.description}</p>
+            <div class="product-footer">
+              <span class="product-price">₹${p.price.toLocaleString('en-IN')}</span>
+              <div class="product-actions">
+                <button class="btn-wishlist wishlisted" onclick="removeFromWishlist(${p.id})" title="Remove">♥</button>
+                <button class="btn-view-details" onclick="location.href='product_detail.html?id=${p.id}'">View Details</button>
+                <button class="btn-add-cart" onclick='addToCart(${JSON.stringify(p)})'>🛒 Add to Cart</button>
+              </div>
+            </div>
+          </div>
+        </div>`).join('');
+    }
+
+    function removeFromWishlist(id) {
+      let wishlist = JSON.parse(localStorage.getItem('starking_wishlist') || '[]');
+      wishlist = wishlist.filter(i => i !== id);
+      localStorage.setItem('starking_wishlist', JSON.stringify(wishlist));
+      showToast('Removed from wishlist');
+      renderWishlist();
+    }
+
+    renderWishlist();
+  </script>
+</body>
+</html>

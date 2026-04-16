@@ -2535,3 +2535,53 @@ footer {
   color: #e74c3c;
   background: #fff5f5;
 }
+
+/* ===================== PRODUCT DETAIL RATINGS ===================== */
+.pd-rating-block {
+  margin: 20px 0;
+  padding: 20px;
+  background: var(--green-muted);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+}
+
+.pd-rating-summary {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 16px;
+  font-size: 1.2rem;
+}
+
+.pd-reviews {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pd-review-item {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  border-left: 3px solid var(--green-accent);
+}
+
+.pd-review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.pd-review-name {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--green-dark);
+}
+
+.pd-review-text {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  font-style: italic;
+  line-height: 1.5;
+}

@@ -3,6 +3,7 @@
   const id = parseInt(params.get('id'));
   const p = allProducts.find(x => x.id === id);
   const d = productDetails[id];
+  const rev = productReviews[id] || { rating: 4.0, count: 10, reviews: [] };
   const section = document.getElementById('pdSection');
 
   if (!p || !d) {
@@ -38,6 +39,26 @@
 
         <div class="pd-actions">
           <button class="btn-add-cart" id="pdAddCart">🛒 Add to Cart</button>
+          <button class="btn-wishlist" id="pdWishlist" title="Wishlist">♡</button>
+        </div>
+
+        <!-- Rating & Reviews -->
+        <div class="pd-rating-block">
+          <div class="pd-rating-summary">
+            ${renderStars(rev.rating)}
+            <span class="rating-score" style="font-size:1.1rem;font-weight:700;margin-left:6px">${rev.rating} / 5</span>
+            <span class="rating-count">&nbsp;(${rev.count} reviews)</span>
+          </div>
+          <div class="pd-reviews">
+            ${rev.reviews.map(r => `
+              <div class="pd-review-item">
+                <div class="pd-review-header">
+                  <span class="pd-review-name">👤 ${r.name}</span>
+                  <span style="color:#f5a623;font-size:0.9rem">${'★'.repeat(Math.round(rev.rating))}${'☆'.repeat(5 - Math.round(rev.rating))}</span>
+                </div>
+                <p class="pd-review-text">"${r.text}"</p>
+              </div>`).join('')}
+          </div>
         </div>
 
         <div class="pd-accordion">
@@ -91,4 +112,22 @@
 
   // Add to cart
   document.getElementById('pdAddCart').addEventListener('click', () => addToCart(p));
+
+  // Wishlist
+  const wlBtn = document.getElementById('pdWishlist');
+  const wishlist = JSON.parse(localStorage.getItem('starking_wishlist') || '[]');
+  if (wishlist.includes(id)) { wlBtn.textContent = '♥'; wlBtn.classList.add('wishlisted'); }
+  wlBtn.addEventListener('click', () => {
+    let wl = JSON.parse(localStorage.getItem('starking_wishlist') || '[]');
+    if (wl.includes(id)) {
+      wl = wl.filter(i => i !== id);
+      wlBtn.textContent = '♡'; wlBtn.classList.remove('wishlisted');
+      showToast('Removed from wishlist');
+    } else {
+      wl.push(id);
+      wlBtn.textContent = '♥'; wlBtn.classList.add('wishlisted');
+      showToast('Added to wishlist ♥');
+    }
+    localStorage.setItem('starking_wishlist', JSON.stringify(wl));
+  });
 })();
