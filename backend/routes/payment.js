@@ -3,6 +3,7 @@ const router    = express.Router();
 const Razorpay  = require('razorpay');
 const crypto    = require('crypto');
 const { pool }  = require('../db');
+const { sendOrderConfirmation } = require('../mailer');
 
 const razorpay = new Razorpay({
   key_id:     process.env.RAZORPAY_KEY_ID,
@@ -75,6 +76,9 @@ router.post('/verify', async (req, res) => {
         );
       }
     }
+
+    // Send confirmation email
+    sendOrderConfirmation({ to: customer_email, name: customer_name, orderId: id, items, total, deliveryAddress: delivery_address });
 
     res.json({ success: true, orderId: id });
   } catch (err) {

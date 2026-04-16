@@ -2474,3 +2474,64 @@ footer {
 }
 .breadcrumb a { color: var(--green-primary); }
 .breadcrumb a:hover { text-decoration: underline; }
+
+/* ===================== RATINGS & REVIEWS ===================== */
+.product-rating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+}
+
+.rating-score {
+  font-weight: 700;
+  color: var(--text-dark);
+  font-size: 0.85rem;
+}
+
+.rating-count {
+  color: var(--text-muted);
+  font-size: 0.78rem;
+}
+
+.product-reviews {
+  margin-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.review-item {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+  border-left: 2px solid var(--green-accent);
+  padding-left: 8px;
+}
+
+.review-author {
+  font-weight: 700;
+  color: var(--text-mid);
+  margin-right: 4px;
+}
+
+/* ===================== WISHLIST BUTTON ===================== */
+.btn-wishlist {
+  background: none;
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: 9px 12px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: var(--transition);
+  color: var(--text-muted);
+  line-height: 1;
+}
+
+.btn-wishlist:hover,
+.btn-wishlist.wishlisted {
+  border-color: #e74c3c;
+  color: #e74c3c;
+  background: #fff5f5;
+}

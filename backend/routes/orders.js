@@ -1,6 +1,7 @@
 const express = require('express');
 const router  = express.Router();
 const { pool } = require('../db');
+const { sendOrderConfirmation } = require('../mailer');
 
 // POST /api/orders
 router.post('/', async (req, res) => {
@@ -19,10 +20,13 @@ router.post('/', async (req, res) => {
       if (item.id) {
         await pool.execute(
           'UPDATE products SET stock = GREATEST(0, stock - ?) WHERE id = ?',
-          [item.quantity || 1, item.id]
+          [item.quantity || item.qty || 1, item.id]
         );
       }
     }
+
+    // Send confirmation email
+    sendOrderConfirmation({ to: customer_email, name: customer_name, orderId: id, items, total, deliveryAddress: delivery_address });
 
     res.json({ success: true, orderId: id });
   } catch (err) {

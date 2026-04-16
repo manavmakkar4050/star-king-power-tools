@@ -126,14 +126,47 @@ const productDetails = {
   }
 };
 
-// ── Render ────────────────────────────────────────────────────────────────────
+// ── Static ratings & reviews per product ─────────────────────────────────────
+const productReviews = {
+  1:  { rating: 4.5, count: 128, reviews: [{ name: 'Rajesh K.', text: 'Excellent drill, handles concrete walls easily.' }, { name: 'Sunil M.', text: 'Very powerful and durable. Worth every rupee.' }] },
+  2:  { rating: 4.2, count: 94,  reviews: [{ name: 'Priya S.', text: 'Perfect for home use, lightweight and easy.' }, { name: 'Amit T.', text: 'Good speed control, works great for furniture.' }] },
+  3:  { rating: 4.6, count: 213, reviews: [{ name: 'Harpreet S.', text: 'Best grinder in this price range, very smooth.' }, { name: 'Vikram R.', text: 'Using it daily on site, no issues at all.' }] },
+  4:  { rating: 4.3, count: 76,  reviews: [{ name: 'Deepak J.', text: 'Clean cuts on marble, very precise.' }, { name: 'Ravi P.', text: 'Solid build, handles granite without heating up.' }] },
+  5:  { rating: 4.4, count: 102, reviews: [{ name: 'Manpreet G.', text: 'Straight cuts every time, great for plywood.' }, { name: 'Sanjay B.', text: 'Powerful motor, handles thick wood easily.' }] },
+  6:  { rating: 4.1, count: 58,  reviews: [{ name: 'Neha V.', text: 'Great for curved cuts, very easy to control.' }, { name: 'Rohit D.', text: 'Good for furniture work, smooth operation.' }] },
+  7:  { rating: 4.7, count: 89,  reviews: [{ name: 'Gurpreet S.', text: 'Beast machine, cuts through metal rods like butter.' }, { name: 'Anil K.', text: 'Using in my fabrication shop daily, zero issues.' }] },
+  8:  { rating: 4.5, count: 67,  reviews: [{ name: 'Balwinder S.', text: 'Breaks concrete fast, very powerful impact.' }, { name: 'Mohan L.', text: 'Heavy but worth it for demolition work.' }] },
+  9:  { rating: 4.4, count: 115, reviews: [{ name: 'Paramjit K.', text: 'Drills through RCC walls smoothly.' }, { name: 'Suresh N.', text: 'Great hammer drill, reliable on construction sites.' }] },
+  10: { rating: 4.3, count: 49,  reviews: [{ name: 'Kuldeep S.', text: 'Mixes cement perfectly, no splashing.' }, { name: 'Dinesh R.', text: 'Strong motor, handles thick mortar well.' }] },
+  11: { rating: 4.0, count: 83,  reviews: [{ name: 'Jaswant S.', text: 'Cleans workshop dust in minutes.' }, { name: 'Pankaj M.', text: 'Lightweight and powerful, good for daily use.' }] },
+  12: { rating: 4.2, count: 61,  reviews: [{ name: 'Gurjit S.', text: 'Smooth finish on wood, very precise depth control.' }, { name: 'Ramesh T.', text: 'Good for door trimming, works like a charm.' }] },
+};
+
+function renderStars(rating) {
+  const full = Math.floor(rating);
+  const half = rating % 1 >= 0.5;
+  let stars = '';
+  for (let i = 0; i < full; i++) stars += '<span style="color:#f5a623">★</span>';
+  if (half) stars += '<span style="color:#f5a623">½</span>';
+  for (let i = full + (half ? 1 : 0); i < 5; i++) stars += '<span style="color:#ccc">★</span>';
+  return stars;
+}
+
+
 let activeCategory = 'All';
 
 function renderProducts(products) {
   const grid = document.getElementById('productsGrid');
   if (!products.length) { grid.innerHTML = '<div class="loading">No products found.</div>'; return; }
 
-  grid.innerHTML = products.map((p, i) => `
+  grid.innerHTML = products.map((p, i) => {
+    const rev = productReviews[p.id] || { rating: 4.0, count: 10, reviews: [] };
+    const reviewsHtml = rev.reviews.map(r => `
+      <div class="review-item">
+        <span class="review-author">${r.name}:</span>
+        <span class="review-text">"${r.text}"</span>
+      </div>`).join('');
+    return `
     <div class="product-card" style="transition-delay:${i * 0.08}s">
       <div class="product-img-wrap">
         <img class="product-img product-img-default" src="${p.images[0]}" alt="${p.name}" loading="lazy" />
@@ -142,22 +175,50 @@ function renderProducts(products) {
       <div class="product-body">
         <span class="product-category">${p.category}</span>
         <h3 class="product-name">${p.name} <small class="product-model">(${p.model})</small></h3>
+        <div class="product-rating">
+          ${renderStars(rev.rating)}
+          <span class="rating-score">${rev.rating}</span>
+          <span class="rating-count">(${rev.count})</span>
+        </div>
         <p class="product-desc">${p.description}</p>
+        <div class="product-reviews">${reviewsHtml}</div>
         <div class="product-footer">
           <span class="product-price">₹${p.price.toLocaleString('en-IN')}</span>
           <div class="product-actions">
+            <button class="btn-wishlist" id="wl-${p.id}" onclick="toggleWishlist(${p.id}, this)" title="Wishlist">♡</button>
             <button class="btn-view-details" onclick="location.href='product_detail.html?id=${p.id}'">View Details</button>
             <button class="btn-add-cart" onclick='addToCart(${JSON.stringify(p)})'>🛒 Add to Cart</button>
           </div>
         </div>
       </div>
-    </div>
-  `).join('');
+    </div>`;
+  }).join('');
+
+  // Mark wishlisted items
+  const wishlist = JSON.parse(localStorage.getItem('starking_wishlist') || '[]');
+  wishlist.forEach(id => {
+    const btn = document.getElementById('wl-' + id);
+    if (btn) { btn.textContent = '♥'; btn.classList.add('wishlisted'); }
+  });
 
   const observer = new IntersectionObserver(entries => {
     entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
   }, { threshold: 0.05 });
   document.querySelectorAll('.product-card').forEach(c => observer.observe(c));
+}
+
+function toggleWishlist(id, btn) {
+  let wishlist = JSON.parse(localStorage.getItem('starking_wishlist') || '[]');
+  if (wishlist.includes(id)) {
+    wishlist = wishlist.filter(i => i !== id);
+    btn.textContent = '♡'; btn.classList.remove('wishlisted');
+    showToast('Removed from wishlist');
+  } else {
+    wishlist.push(id);
+    btn.textContent = '♥'; btn.classList.add('wishlisted');
+    showToast('Added to wishlist ♥');
+  }
+  localStorage.setItem('starking_wishlist', JSON.stringify(wishlist));
 }
 
 

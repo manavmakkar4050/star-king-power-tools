@@ -123,12 +123,12 @@
             <label>Delivery Speed</label>
             <div style="display:flex;flex-direction:column;gap:10px;margin-top:8px">
               <label style="display:flex;align-items:center;gap:12px;padding:14px;border:2px solid var(--green-accent);border-radius:var(--radius);cursor:pointer;background:var(--green-muted);box-sizing:border-box;width:100%">
-                <input type="radio" name="delivery" value="standard" checked style="accent-color:var(--green-accent);flex-shrink:0">
-                <div style="color:var(--text-dark);font-size:0.9rem"><strong>Standard Delivery</strong> — 3–5 working days &nbsp;<span style="color:var(--green-primary);font-weight:700">FREE</span></div>
+                <input type="radio" name="delivery" value="standard" checked style="accent-color:var(--green-accent);flex-shrink:0" onchange="updateDeliveryDates()">
+                <div style="color:var(--text-dark);font-size:0.9rem"><strong>Standard Delivery</strong> — <span id="standardDateRange">3–5 working days</span> &nbsp;<span style="color:var(--green-primary);font-weight:700">FREE</span></div>
               </label>
               <label style="display:flex;align-items:center;gap:12px;padding:14px;border:2px solid var(--border);border-radius:var(--radius);cursor:pointer;box-sizing:border-box;width:100%" id="expressOption">
-                <input type="radio" name="delivery" value="express" style="accent-color:var(--green-accent);flex-shrink:0">
-                <div style="color:var(--text-dark);font-size:0.9rem"><strong>Express Delivery</strong> — Next working day &nbsp;<span style="color:var(--text-muted)">₹149</span></div>
+                <input type="radio" name="delivery" value="express" style="accent-color:var(--green-accent);flex-shrink:0" onchange="updateDeliveryDates()">
+                <div style="color:var(--text-dark);font-size:0.9rem"><strong>Express Delivery</strong> — <span id="expressDateRange">Next working day</span> &nbsp;<span style="color:var(--text-muted)">₹149</span></div>
               </label>
             </div>
           </div>
@@ -470,6 +470,35 @@
     document.addEventListener('change', e => {
       if (e.target.name === 'delivery') renderSummary();
     });
+
+    function addWorkingDays(date, days) {
+      let d = new Date(date);
+      let added = 0;
+      while (added < days) {
+        d.setDate(d.getDate() + 1);
+        if (d.getDay() !== 0 && d.getDay() !== 6) added++;
+      }
+      return d;
+    }
+
+    function fmtDate(d) {
+      return d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
+    }
+
+    function updateDeliveryDates() {
+      const today = new Date();
+      const std3 = addWorkingDays(today, 3);
+      const std5 = addWorkingDays(today, 5);
+      const exp1 = addWorkingDays(today, 1);
+      const stdEl = document.getElementById('standardDateRange');
+      const expEl = document.getElementById('expressDateRange');
+      if (stdEl) stdEl.textContent = `${fmtDate(std3)} – ${fmtDate(std5)}`;
+      if (expEl) expEl.textContent = fmtDate(exp1);
+      renderSummary();
+    }
+
+    // Init delivery dates on load
+    updateDeliveryDates();
 
     async function placeOrder() {
       if (!document.getElementById('termsCheck').checked) {
