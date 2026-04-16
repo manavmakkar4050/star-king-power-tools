@@ -203,14 +203,33 @@
       { id: 5, name: "Circular Saw", category: "Saws", description: "High-speed circular saw for clean cuts", price: 3800, image_url: "../images/circular_saw_1.png" },
       { id: 8, name: "Demolition Hammer", category: "Hammers", description: "Heavy-duty demolition hammer for tough jobs", price: 7500, image_url: "../images/demolition_hammer_1.png" }
     ];
+    const featuredReviews = {
+      1: { rating: 4.5, count: 128, reviews: [{ name: 'Rajesh K.', text: 'Excellent drill, handles concrete walls easily.' }, { name: 'Sunil M.', text: 'Very powerful and durable.' }] },
+      3: { rating: 4.6, count: 213, reviews: [{ name: 'Harpreet S.', text: 'Best grinder in this price range.' }, { name: 'Vikram R.', text: 'Using it daily on site, no issues.' }] },
+      5: { rating: 4.4, count: 102, reviews: [{ name: 'Manpreet G.', text: 'Straight cuts every time, great for plywood.' }, { name: 'Sanjay B.', text: 'Powerful motor, handles thick wood easily.' }] },
+      8: { rating: 4.5, count: 67,  reviews: [{ name: 'Balwinder S.', text: 'Breaks concrete fast, very powerful.' }, { name: 'Mohan L.', text: 'Worth it for demolition work.' }] },
+    };
+    function featuredStars(rating) {
+      const full = Math.floor(rating), half = rating % 1 >= 0.5;
+      let s = '';
+      for (let i = 0; i < full; i++) s += '<span style="color:#f5a623">★</span>';
+      if (half) s += '<span style="color:#f5a623">½</span>';
+      for (let i = full + (half?1:0); i < 5; i++) s += '<span style="color:#ccc">★</span>';
+      return s;
+    }
     const grid = document.getElementById('featuredGrid');
-    grid.innerHTML = featuredProducts.map((p, i) => `
+    grid.innerHTML = featuredProducts.map((p, i) => {
+      const rev = featuredReviews[p.id] || { rating: 4.0, count: 10, reviews: [] };
+      const reviewsHtml = rev.reviews.map(r => `<div class="review-item"><span class="review-author">${r.name}:</span> <span class="review-text">"${r.text}"</span></div>`).join('');
+      return `
       <div class="product-card" style="transition-delay:${i*0.1}s">
         <div class="product-img-wrap"><img class="product-img" src="${p.image_url}" alt="${p.name}" loading="lazy" /></div>
         <div class="product-body">
           <span class="product-category">${p.category}</span>
           <h3 class="product-name">${p.name}</h3>
+          <div class="product-rating">${featuredStars(rev.rating)}<span class="rating-score" style="margin-left:4px">${rev.rating}</span><span class="rating-count">(${rev.count})</span></div>
           <p class="product-desc">${p.description}</p>
+          <div class="product-reviews">${reviewsHtml}</div>
           <div class="product-footer">
             <span class="product-price">₹${p.price.toLocaleString('en-IN')}</span>
             <div class="product-actions">
@@ -219,9 +238,9 @@
             </div>
           </div>
         </div>
-      </div>`).join('');
-    new IntersectionObserver(entries => entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }), {threshold:0.05})
-      .observe && document.querySelectorAll('.product-card').forEach(c => new IntersectionObserver(e => e.forEach(x => { if(x.isIntersecting) x.target.classList.add('visible'); }), {threshold:0.05}).observe(c));
+      </div>`;
+    }).join('');
+    document.querySelectorAll('.product-card').forEach(c => new IntersectionObserver(e => e.forEach(x => { if(x.isIntersecting) x.target.classList.add('visible'); }), {threshold:0.05}).observe(c));
   </script>
   <script src="js/chatbot.js"></script>
 </body>
